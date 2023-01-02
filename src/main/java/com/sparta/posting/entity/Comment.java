@@ -2,10 +2,11 @@ package com.sparta.posting.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.posting.dto.CommentRequestDto;
-import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 
 
 @Getter

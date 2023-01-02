@@ -2,16 +2,20 @@ package com.sparta.posting.jwt;
 
 
 import com.sparta.posting.entity.UserRoleEnum;
+import com.sparta.posting.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
@@ -30,6 +34,7 @@ public class JwtUtil {
     private String secretKey;         //비밀키 jwt암호 해독의 필수키
     private Key key;                   //secretKey를 사용할수있게 변화시킨 key
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @PostConstruct       //의존성주입이 이루어진후 초기화 하는 매서드 로직이 실행되기전에 수행된다.
     public void init() {
@@ -81,5 +86,8 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-
+    public Authentication createAuthentication(String username) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        return new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+    }
 }
