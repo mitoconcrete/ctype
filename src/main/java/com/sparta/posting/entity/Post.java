@@ -1,5 +1,6 @@
 package com.sparta.posting.entity;
 
+import com.sparta.posting.dto.CommentResponseDto;
 import com.sparta.posting.dto.PostRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,8 +29,11 @@ public class Post extends Datestamped{
     @Column(nullable = false)
     private Long userId;
 
+    public int likecnt = 0;
+
     @OneToMany
     public List<Comment> comments = new ArrayList<>();
+
 
     public Post(PostRequestDto postRequestDto, User user) {               //Posting을 만들떄는 모든 변수에 값을 넣어야 한다.
         this.title = postRequestDto.getTitle();

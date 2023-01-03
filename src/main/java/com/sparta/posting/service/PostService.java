@@ -4,7 +4,9 @@ import com.sparta.posting.dto.PostResponseDto;
 import com.sparta.posting.dto.PostRequestDto;
 import com.sparta.posting.dto.HttpResponseDto;
 import com.sparta.posting.entity.*;
+import com.sparta.posting.repository.CommentLikeRepository;
 import com.sparta.posting.repository.CommentRepository;
+import com.sparta.posting.repository.PostLikeRepository;
 import com.sparta.posting.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,8 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;   //@RequiredArgsConstructor 때문에 초기화 하지 않고도 사용가능
     private final CommentRepository commentRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
     @Transactional             //컨트롤러와 결합해주는 역할을 한다.
     public PostResponseDto createPosting(PostRequestDto postRequestDto, User user) {
@@ -31,6 +35,8 @@ public class PostService {
         List<PostResponseDto> postResponseDtos = new ArrayList<>();
         for (Post post : posts) {
             post.comments = commentRepository.findAllByPostIdOrderByCreatedAtDesc(post.getId());
+            for(Comment comment : post.comments) {comment.likecnt = commentLikeRepository.countCommentLikesByCommentId(comment.getId());}
+            post.likecnt = postLikeRepository.countPostLikesByPostId(post.getId());
             postResponseDtos.add(new PostResponseDto(post));
         }
         return postResponseDtos;
@@ -42,6 +48,8 @@ public class PostService {
                 () -> new NullPointerException("게시물이 존재하지 않습니다.")
         );
         post.comments = commentRepository.findAllByPostIdOrderByCreatedAtDesc(post.getId());
+        for(Comment comment : post.comments) {comment.likecnt = commentLikeRepository.countCommentLikesByCommentId(comment.getId());}
+        post.likecnt = postLikeRepository.countPostLikesByPostId(post.getId());
         return new PostResponseDto(post);
     }
 

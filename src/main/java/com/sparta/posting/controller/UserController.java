@@ -5,6 +5,7 @@ import com.sparta.posting.dto.HttpResponseDto;
 import com.sparta.posting.dto.SignupRequestDto;
 import com.sparta.posting.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 public class UserController {
     private final UserService userService;
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     @PostMapping("/signup")
     public HttpResponseDto signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {      //@Valid로 SignupRequestDto에 제한식을 걸어서 회원가입한다.
         return userService.signup(signupRequestDto);
