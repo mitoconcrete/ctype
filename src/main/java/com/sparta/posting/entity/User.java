@@ -1,11 +1,12 @@
 package com.sparta.posting.entity;
 
-
+import jakarta.persistence.*;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter          				//접근가능하게 하기위해
