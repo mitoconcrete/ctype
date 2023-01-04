@@ -1,29 +1,30 @@
 package com.sparta.posting.controller;
 
 import com.sparta.posting.dto.CommentRequestDto;
-import com.sparta.posting.dto.ResponseDto;
-import com.sparta.posting.entity.Comment;
+import com.sparta.posting.dto.CommentResponseDto;
+import com.sparta.posting.dto.HttpResponseDto;
+import com.sparta.posting.security.UserDetailsImpl;
 import com.sparta.posting.service.CommentService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/postings")
+@RequestMapping("/api/post")
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/{postingId}")
-    public Comment addComment(@PathVariable Long postingId, @RequestBody CommentRequestDto commentRequestDto, HttpServletRequest request) throws ResponseDto {
-        return commentService.addComment(postingId,commentRequestDto,request);
+    @PostMapping("/{postId}/comment")
+    public CommentResponseDto addComment(@PathVariable Long postId, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.addComment(postId,commentRequestDto,userDetails.getUser());
     }
-    @PutMapping("/{postingId}/comment/{id}")
-    public Comment updateComment(@PathVariable Long id, @RequestBody CommentRequestDto commentRequestDto, HttpServletRequest request) throws ResponseDto {
-        return commentService.update(id,commentRequestDto,request);
+    @PutMapping("/{postId}/comment/{commentId}")
+    public Object updateComment(@PathVariable Long commentId, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.update(commentId,commentRequestDto,userDetails.getUser());
     }
-    @DeleteMapping("/{postingId}/comment/{id}")
-    public ResponseDto deleteComment(@PathVariable Long id, HttpServletRequest request) throws ResponseDto {
-        return commentService.delete(id,request);
+    @DeleteMapping("/{postId}/comment/{commentId}")
+    public HttpResponseDto deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.delete(commentId,userDetails.getUser());
     }
 }
