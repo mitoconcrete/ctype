@@ -15,7 +15,11 @@ public class PostResponseAdminDto {
     private String title;
     private String contents;
     private String writer;
+<<<<<<< HEAD
     private int likecnt;
+=======
+
+>>>>>>> feature/commentlike
     private List<CommentResponseAdminDto> comments = new ArrayList<>();
 
     public PostResponseAdminDto(Post post) {

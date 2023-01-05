@@ -9,9 +9,11 @@ import lombok.Setter;
 public class CommentResponseDto {
     private String content;
     private String writer;
+    private int likecnt;
 
     public CommentResponseDto(Comment comment) {
         this.content = comment.getContent();
         this.writer = comment.getWriter();
+        this.likecnt = comment.getLikecnt();
     }
 }
