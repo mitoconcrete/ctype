@@ -35,10 +35,7 @@ public class Post extends Datestamped{
     @JsonIgnore
     private Long userId;
 
-<<<<<<< HEAD
     private int likecnt = 0;
-=======
->>>>>>> feature/commentlike
 
     @OneToMany
     public List<Comment> comments = new ArrayList<>();
@@ -61,15 +58,11 @@ public class Post extends Datestamped{
     public void removecomment(Comment comment) {
         this.comments.remove(comment);
     }
-
-<<<<<<< HEAD
+    
     public void likeplus() {
         this.likecnt += 1;
     }
     public void likeminus() {
         this.likecnt -= 1;
     }
-=======
-
->>>>>>> feature/commentlike
 }
