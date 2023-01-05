@@ -1,13 +1,11 @@
 package com.sparta.posting.entity;
 
-import com.sparta.posting.dto.CommentResponseDto;
-import com.sparta.posting.dto.PostRequestDto;
-import com.sparta.posting.repository.CommentRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sparta.posting.dto.PostingRequestDto;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +15,7 @@ import java.util.List;
 public class Post extends Datestamped{
     @Id                //테이블 상의 Primary Key와 같은 의미를 가진다.
     @GeneratedValue(strategy = GenerationType.AUTO)     //자동으로 고유 id값을 생성 해주는거 같다.
+    @JsonIgnore
     private Long id;
 
     @Column(nullable = false)         //@Entity 안에서 생성하는 DB테이블의 필드를 만들어 준다. (nullable = false)는 필드값으로 null이 불가능하고 반드시 값이 들어가야함을 나타낸다.
@@ -29,28 +28,21 @@ public class Post extends Datestamped{
     private String writer;
 
     @Column(nullable = false)
+    @JsonIgnore
     private Long userId;
 
-
     @OneToMany
-    private List<Comment> comments = new ArrayList<>();
+    public List<Comment> comments = new ArrayList<>();
 
-    public Post(PostRequestDto postRequestDto, User user) {               //Posting을 만들떄는 모든 변수에 값을 넣어야 한다.
-        this.title = postRequestDto.getTitle();
-        this.contents = postRequestDto.getContents();
+    public Post(PostingRequestDto postingRequestDto, User user) {               //Posting을 만들떄는 모든 변수에 값을 넣어야 한다.
+        this.title = postingRequestDto.getTitle();
+        this.contents = postingRequestDto.getContents();
         this.writer = user.getUsername();
         this.userId = user.getId();
     }
 
-    public void update(PostRequestDto postRequestDto) {           //수정할때는 제목,내용만 변경가능하다.
-        this.title = postRequestDto.getTitle();
-        this.contents = postRequestDto.getContents();
-    }
-
-    public void addcomment(Comment comment) {
-        this.comments.add(comment);
-    }
-    public void removecomment(Comment comment) {
-        this.comments.remove(comment);
+    public void update(PostingRequestDto postingRequestDto) {           //수정할때는 제목,내용만 변경가능하다.
+        this.title = postingRequestDto.getTitle();
+        this.contents = postingRequestDto.getContents();
     }
 }
