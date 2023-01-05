@@ -23,11 +23,9 @@ public class PostLikeService {
         );
         if(postLikeRepository.findByPostIdAndUserId(postId, userId).isPresent()) {
             postLikeRepository.deleteByPostIdAndUserId(postId,userId);
-            post.likeminus();
             return new HttpResponseDto("좋아요 취소!", HttpStatus.UNAUTHORIZED.value());
         } else {
             postLikeRepository.save(new PostLike(postId,userId));
-            post.likeplus();
             return new HttpResponseDto("좋아요 성공!", HttpStatus.UNAUTHORIZED.value());
         }
     }

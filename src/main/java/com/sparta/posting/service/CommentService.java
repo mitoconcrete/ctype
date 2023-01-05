@@ -25,9 +25,8 @@ public class CommentService {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new NullPointerException("게시물이 존재하지 않습니다.")
         );
-        Comment comment = new Comment(commentRequestDto, user, postId);
+        Comment comment = new Comment(commentRequestDto, user, post);
         commentRepository.save(comment);
-        post.addcomment(commentRepository.findAllByPostIdOrderByCreatedAtDesc(postId));
         return new CommentResponseDto(comment);
     }
 
@@ -36,12 +35,11 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new NullPointerException("댓글이 존재하지 않습니다.")
         );
-        Post post = postRepository.findById(comment.getPostId()).orElseThrow(
+        Post post = postRepository.findById(comment.getPost().getId()).orElseThrow(
                 () -> new NullPointerException("게시물이 존재하지 않습니다.")
         );
-        if (user.getId().equals(comment.getUserId())) {
+        if (user.getId().equals(comment.getUser().getId())) {
             comment.update(commentRequestDto);
-            post.addcomment(commentRepository.findAllByPostIdOrderByCreatedAtDesc(comment.getPostId()));
             return new CommentResponseDto(comment);
         } else {
             return new HttpResponseDto("작성자만 수정할 수 있습니다.", 400);
@@ -53,11 +51,10 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new NullPointerException("댓글이 존재하지 않습니다.")
         );
-        Post post = postRepository.findById(comment.getPostId()).orElseThrow(
+        Post post = postRepository.findById(comment.getPost().getId()).orElseThrow(
                 () -> new NullPointerException("게시물이 존재하지 않습니다.")
         );
-        if (user.getId().equals(comment.getUserId())) {
-            post.removecomment(comment);
+        if (user.getId().equals(comment.getUser().getId())) {
             commentRepository.delete(comment);
             return new HttpResponseDto("댓글삭제가 완료되었습니다.", HttpStatus.UNAUTHORIZED.value());
         } else {

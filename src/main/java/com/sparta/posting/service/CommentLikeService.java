@@ -24,11 +24,9 @@ public class CommentLikeService {
         );
         if (commentLikeRepository.findByCommentIdAndUserId(commentId, userId).isPresent()) {
             commentLikeRepository.deleteByCommentIdAndUserId(commentId, userId);
-            comment.likeminus();
             return new HttpResponseDto("좋아요 취소!", HttpStatus.UNAUTHORIZED.value());
         } else {
             commentLikeRepository.save(new CommentLike(commentId, userId));
-            comment.likeplus();
             return new HttpResponseDto("좋아요 성공!", HttpStatus.UNAUTHORIZED.value());
         }
     }
