@@ -1,16 +1,11 @@
 package com.sparta.posting.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+public class SecurityExceptionDto {
 
-@Setter
-@Getter
-public class HttpResponseDto {
     private String msg;
 
     private int statusCode;
-
-    public HttpResponseDto(String msg, int statusCode) {
+    public SecurityExceptionDto(int statusCode, String msg) {
         this.msg = msg;
         this.statusCode = statusCode;
     }
