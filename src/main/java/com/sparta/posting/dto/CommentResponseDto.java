@@ -13,7 +13,6 @@ public class CommentResponseDto {
 
     public CommentResponseDto(Comment comment) {
         this.content = comment.getContent();
-        this.writer = comment.getWriter();
-        this.likecnt = comment.getLikecnt();
+        this.writer = comment.getUser().getUsername();
     }
 }

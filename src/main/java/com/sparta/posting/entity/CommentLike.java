@@ -14,10 +14,10 @@ public class CommentLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Long commentId;
 
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Long userId;
 
     public CommentLike(Long commentId, Long userId) {

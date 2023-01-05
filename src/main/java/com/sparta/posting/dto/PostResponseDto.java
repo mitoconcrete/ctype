@@ -22,8 +22,7 @@ public class PostResponseDto {
         this.id = post.getId();
         this.title = post.getTitle();
         this.contents = post.getContents();
-        this.writer = post.getWriter();
-        this.likecnt = post.getLikecnt();
+        this.writer = post.getUser().getUsername();
         for(Comment comment :post.getComments()){this.comments.add(new CommentResponseDto(comment));}
     }
 }

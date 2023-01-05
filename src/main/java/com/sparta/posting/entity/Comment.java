@@ -15,30 +15,24 @@ public class Comment extends Datestamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonIgnore
     private Long id;
 
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private String writer;
-
     @JoinColumn(name="writer",nullable = false)
-    @JsonIgnore
-    private Long userId;
+    @ManyToOne
+    private User user;
 
     @JoinColumn(name="postId",nullable = false)
-    @JsonIgnore
-    private Long postId;
+    @ManyToOne
+    private Post post;
 
-    private int likecnt;
 
-    public Comment(CommentRequestDto commentRequestDto, User user, Long id) {
+    public Comment(CommentRequestDto commentRequestDto, User user, Post post) {
         this.content = commentRequestDto.getContent();
-        this.writer = user.getUsername();
-        this.userId = user.getId();
-        this.postId = id;
+        this.user = user;
+        this.post = post;
     }
 
 
@@ -46,10 +40,4 @@ public class Comment extends Datestamped{
         this.content = commentRequestDto.getContent();
     }
 
-    public void likeplus() {
-        this.likecnt += 1;
-    }
-    public void likeminus() {
-        this.likecnt -= 1;
-    }
 }

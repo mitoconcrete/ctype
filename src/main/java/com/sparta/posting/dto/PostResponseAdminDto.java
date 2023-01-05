@@ -15,19 +15,14 @@ public class PostResponseAdminDto {
     private String title;
     private String contents;
     private String writer;
-<<<<<<< HEAD
     private int likecnt;
-=======
-
->>>>>>> feature/commentlike
     private List<CommentResponseAdminDto> comments = new ArrayList<>();
 
     public PostResponseAdminDto(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.contents = post.getContents();
-        this.writer = post.getWriter();
-        this.likecnt = post.getLikecnt();
+        this.writer = post.getUser().getUsername();
         for(Comment comment :post.getComments()){this.comments.add(new CommentResponseAdminDto(comment));}
     }
 }

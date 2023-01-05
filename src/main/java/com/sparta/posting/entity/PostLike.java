@@ -19,9 +19,9 @@ public class PostLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Long postId;
 
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Long userId;
 }

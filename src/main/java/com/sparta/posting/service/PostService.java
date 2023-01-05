@@ -3,8 +3,8 @@ package com.sparta.posting.service;
 import com.sparta.posting.dto.PostResponseDto;
 import com.sparta.posting.dto.PostRequestDto;
 import com.sparta.posting.dto.HttpResponseDto;
-import com.sparta.posting.entity.*;
-import com.sparta.posting.repository.CommentRepository;
+import com.sparta.posting.entity.Post;
+import com.sparta.posting.entity.User;
 import com.sparta.posting.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,7 +47,7 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new NullPointerException("게시물이 존재하지 않습니다.")
         );
-        if(post.getUserId() != user.getId()) {
+        if(post.getUser().getId() != user.getId()) {
             return new HttpResponseDto("작성자만 수정할 수 있습니다.", HttpStatus.UNAUTHORIZED.value());
         }
         post.update(postRequestDto);
@@ -59,7 +59,7 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new NullPointerException("게시물이 존재하지 않습니다.")
         );
-        if (post.getUserId() != user.getId()) {
+        if (post.getUser().getId() != user.getId()) {
             return new HttpResponseDto("작성자만 삭제할 수 있습니다.",HttpStatus.UNAUTHORIZED.value());
         }
         postRepository.deleteById(postId);
