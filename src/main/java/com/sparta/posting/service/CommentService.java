@@ -26,8 +26,8 @@ public class CommentService {
                 () -> new NullPointerException("게시물이 존재하지 않습니다.")
         );
         Comment comment = new Comment(commentRequestDto, user, postId);
-        post.addcomment(comment);
         commentRepository.save(comment);
+        post.addcomment(commentRepository.findAllByPostIdOrderByCreatedAtDesc(postId));
         return new CommentResponseDto(comment);
     }
 
@@ -39,10 +39,9 @@ public class CommentService {
         Post post = postRepository.findById(comment.getPostId()).orElseThrow(
                 () -> new NullPointerException("게시물이 존재하지 않습니다.")
         );
-        post.removecomment(comment);
         if (user.getId().equals(comment.getUserId())) {
             comment.update(commentRequestDto);
-            post.addcomment(comment);
+            post.addcomment(commentRepository.findAllByPostIdOrderByCreatedAtDesc(comment.getPostId()));
             return new CommentResponseDto(comment);
         } else {
             return new HttpResponseDto("작성자만 수정할 수 있습니다.", 400);

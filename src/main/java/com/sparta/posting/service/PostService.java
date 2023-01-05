@@ -17,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor   //초기화 되지않은 final 필드나, @NonNull 이 붙은 필드에 대해 생성자를 생성해 줍니다.
 public class PostService {
     private final PostRepository postRepository;   //@RequiredArgsConstructor 때문에 초기화 하지 않고도 사용가능
-    private final CommentRepository commentRepository;
 
     @Transactional             //컨트롤러와 결합해주는 역할을 한다.
     public PostResponseDto createPosting(PostRequestDto postRequestDto, User user) {
