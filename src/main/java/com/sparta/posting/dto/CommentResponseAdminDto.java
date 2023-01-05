@@ -11,8 +11,9 @@ public class CommentResponseAdminDto {
     private String writer;
     private int likecnt;
 
-    public CommentResponseAdminDto(Comment comment) {
+    public CommentResponseAdminDto(Comment comment, int likecnt) {
         this.content = comment.getContent();
         this.writer = comment.getUser().getUsername();
+        this.likecnt = likecnt;
     }
 }

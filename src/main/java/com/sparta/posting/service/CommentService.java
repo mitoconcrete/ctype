@@ -4,6 +4,7 @@ import com.sparta.posting.dto.CommentRequestDto;
 import com.sparta.posting.dto.CommentResponseDto;
 import com.sparta.posting.dto.HttpResponseDto;
 import com.sparta.posting.entity.*;
+import com.sparta.posting.repository.CommentLikeRepository;
 import com.sparta.posting.repository.CommentRepository;
 
 
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final CommentLikeRepository commentLikeRepository;
     @Transactional
     public CommentResponseDto addComment(Long postId, CommentRequestDto commentRequestDto, User user) {
         Post post = postRepository.findById(postId).orElseThrow(
@@ -40,7 +42,7 @@ public class CommentService {
         );
         if (user.getId().equals(comment.getUser().getId())) {
             comment.update(commentRequestDto);
-            return new CommentResponseDto(comment);
+            return new CommentResponseDto(comment, commentLikeRepository.countCommentLikesByCommentId(commentId));
         } else {
             return new HttpResponseDto("작성자만 수정할 수 있습니다.", 400);
         }
