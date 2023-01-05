@@ -33,6 +33,7 @@ public class Post extends Datestamped{
     @ManyToOne
     private User user;
 
+    @JoinColumn
     @OneToMany
     private List<Comment> comments = new ArrayList<>();
 

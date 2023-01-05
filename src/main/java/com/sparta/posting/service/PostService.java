@@ -1,10 +1,15 @@
 package com.sparta.posting.service;
 
+import com.sparta.posting.dto.CommentResponseDto;
 import com.sparta.posting.dto.PostResponseDto;
 import com.sparta.posting.dto.PostRequestDto;
 import com.sparta.posting.dto.HttpResponseDto;
+import com.sparta.posting.entity.Comment;
 import com.sparta.posting.entity.Post;
 import com.sparta.posting.entity.User;
+import com.sparta.posting.repository.CommentLikeRepository;
+import com.sparta.posting.repository.CommentRepository;
+import com.sparta.posting.repository.PostLikeRepository;
 import com.sparta.posting.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +22,9 @@ import java.util.List;
 @RequiredArgsConstructor   //초기화 되지않은 final 필드나, @NonNull 이 붙은 필드에 대해 생성자를 생성해 줍니다.
 public class PostService {
     private final PostRepository postRepository;   //@RequiredArgsConstructor 때문에 초기화 하지 않고도 사용가능
+    private final CommentRepository commentRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
     @Transactional             //컨트롤러와 결합해주는 역할을 한다.
     public PostResponseDto createPosting(PostRequestDto postRequestDto, User user) {
@@ -29,7 +37,12 @@ public class PostService {
         List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
         List<PostResponseDto> postResponseDtos = new ArrayList<>();
         for (Post post : posts) {
-            postResponseDtos.add(new PostResponseDto(post));
+            List<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtDesc(post.getId());
+            List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
+            for (Comment comment : comments) {
+                commentResponseDtos.add(new CommentResponseDto(comment,commentLikeRepository.countCommentLikesByCommentId(comment.getId())));
+            }
+            postResponseDtos.add(new PostResponseDto(post,commentResponseDtos, postLikeRepository.countPostLikesByPostId(post.getId())));
         }
         return postResponseDtos;
     }
@@ -39,7 +52,12 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new NullPointerException("게시물이 존재하지 않습니다.")
         );
-        return new PostResponseDto(post);
+        List<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtDesc(post.getId());
+        List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
+        for (Comment comment : comments) {
+            commentResponseDtos.add(new CommentResponseDto(comment,commentLikeRepository.countCommentLikesByCommentId(comment.getId())));
+        }
+        return new PostResponseDto(post,commentResponseDtos, postLikeRepository.countPostLikesByPostId(post.getId()));
     }
 
     @Transactional
@@ -51,7 +69,7 @@ public class PostService {
             return new HttpResponseDto("작성자만 수정할 수 있습니다.", HttpStatus.UNAUTHORIZED.value());
         }
         post.update(postRequestDto);
-        return new PostResponseDto(post);
+        return new PostResponseDto(post, postLikeRepository.countPostLikesByPostId(post.getId()));
     }
 
     @Transactional

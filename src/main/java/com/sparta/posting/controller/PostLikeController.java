@@ -19,6 +19,6 @@ public class PostLikeController {
 
     @PostMapping("/{postId}/like")
     public HttpResponseDto toggleLike (@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postLikeService.toggleLike(postId,userDetails.getUser().getId());
+        return postLikeService.toggleLike(postId,userDetails.getUser());
     }
 }

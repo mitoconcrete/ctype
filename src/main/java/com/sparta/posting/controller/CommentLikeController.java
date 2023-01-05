@@ -19,6 +19,6 @@ public class CommentLikeController {
 
     @PostMapping("/{postId}/comment/{commentId}")
     public HttpResponseDto toggleLike(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentLikeService.toggleLike(commentId,userDetails.getUser().getId());
+        return commentLikeService.toggleLike(commentId,userDetails.getUser());
     }
 }

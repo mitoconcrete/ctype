@@ -18,11 +18,27 @@ public class PostResponseDto {
     private int likecnt;
     private List<CommentResponseDto> comments = new ArrayList<>();
 
+    public PostResponseDto(Post post,List<CommentResponseDto> comments, int likecnt) {
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.contents = post.getContents();
+        this.writer = post.getUser().getUsername();
+        this.comments = comments;
+        this.likecnt = likecnt;
+    }
+    public PostResponseDto(Post post, int likecnt) {
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.contents = post.getContents();
+        this.writer = post.getUser().getUsername();
+        this.likecnt = likecnt;
+    }
+
     public PostResponseDto(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.contents = post.getContents();
         this.writer = post.getUser().getUsername();
-        for(Comment comment :post.getComments()){this.comments.add(new CommentResponseDto(comment));}
     }
 }
+

@@ -18,11 +18,12 @@ public class PostResponseAdminDto {
     private int likecnt;
     private List<CommentResponseAdminDto> comments = new ArrayList<>();
 
-    public PostResponseAdminDto(Post post) {
+    public PostResponseAdminDto(Post post,int likecnt) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.contents = post.getContents();
         this.writer = post.getUser().getUsername();
-        for(Comment comment :post.getComments()){this.comments.add(new CommentResponseAdminDto(comment));}
+        this.likecnt = likecnt;
     }
+
 }

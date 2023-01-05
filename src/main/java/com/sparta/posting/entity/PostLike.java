@@ -10,18 +10,20 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 public class PostLike {
-    public PostLike(Long postId, Long userId) {
-        this.postId = postId;
-        this.userId = userId;
+    public PostLike(Post post, User user) {
+        this.post = post;
+        this.user = user;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(nullable = false)
-    private Long postId;
+    @JoinColumn(name = "POST_ID",nullable = false)
+    @ManyToOne
+    private Post post;
 
-    @JoinColumn(nullable = false)
-    private Long userId;
+    @JoinColumn(name = "USER_ID",nullable = false)
+    @ManyToOne
+    private User user;
 }

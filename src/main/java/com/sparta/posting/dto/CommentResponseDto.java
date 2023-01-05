@@ -11,6 +11,12 @@ public class CommentResponseDto {
     private String writer;
     private int likecnt;
 
+    public CommentResponseDto(Comment comment, int likecnt) {
+        this.content = comment.getContent();
+        this.writer = comment.getUser().getUsername();
+        this.likecnt = likecnt;
+    }
+
     public CommentResponseDto(Comment comment) {
         this.content = comment.getContent();
         this.writer = comment.getUser().getUsername();
