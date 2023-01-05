@@ -43,6 +43,6 @@ public class PostController {
 
     @DeleteMapping("/post/{postId}")
     public HttpResponseDto deletePosting(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.deletePosting(postId,userDetails.getUser());
+        return postService.deletePost(postId,userDetails.getUser());
     }
 }
