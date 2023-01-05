@@ -5,15 +5,14 @@ import com.sparta.posting.dto.ResponseDto;
 import com.sparta.posting.entity.*;
 import com.sparta.posting.jwt.JwtUtil;
 import com.sparta.posting.repository.CommentRepository;
-import com.sparta.posting.repository.PostingRepository;
+import com.sparta.posting.repository.PostRepository;
 import com.sparta.posting.repository.UserRepository;
 import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import javax.servlet.http.HttpServletRequest;
 
 
 @Service
@@ -22,7 +21,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-    private final PostingRepository postingRepository;
+    private final PostRepository postRepository;
     private final JwtUtil jwtUtil;
 
     @Transactional
@@ -42,11 +41,11 @@ public class CommentService {
             User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
                     () -> new ResponseDto("회원을 찾을 수 없습니다.", HttpStatus.UNAUTHORIZED.value())
             );
-            Post post = postingRepository.findById(postingId).orElseThrow(
+            Post post = postRepository.findById(postingId).orElseThrow(
                     () -> new ResponseDto("게시물이 존재하지 않습니다.", HttpStatus.UNAUTHORIZED.value())
             );
             Comment comment = new Comment(commentRequestDto, user, postingId);
-
+            post.addcomment(comment);
             commentRepository.save(comment);
 
             return comment;
@@ -74,12 +73,18 @@ public class CommentService {
             Comment comment = commentRepository.findById(id).orElseThrow(
                     () -> new ResponseDto("댓글이 존재하지 않습니다.", HttpStatus.UNAUTHORIZED.value())
             );
+            Post post = postRepository.findById(comment.getPostId()).orElseThrow(
+                    () -> new NullPointerException("게시물이 존재하지 않습니다.")
+            );
+            post.removecomment(comment);
             if(user.getRole() == UserRoleEnum.ADMIN) {
                 comment.update(commentRequestDto);
+                post.addcomment(comment);
                 return comment;
             }
             if (user.getId().equals(comment.getUserId())) {
                 comment.update(commentRequestDto);
+                post.addcomment(comment);
                 return comment;
             } else {
                 throw new ResponseDto("작성자만 수정할 수 있습니다.", HttpStatus.UNAUTHORIZED.value());
@@ -108,12 +113,17 @@ public class CommentService {
             Comment comment = commentRepository.findById(id).orElseThrow(
                     () -> new ResponseDto("댓글이 존재하지 않습니다.", HttpStatus.UNAUTHORIZED.value())
             );
+            Post post = postRepository.findById(comment.getPostId()).orElseThrow(
+                    () -> new NullPointerException("게시물이 존재하지 않습니다.")
+            );
             ResponseDto response = new ResponseDto("댓글삭제가 완료되었습니다.", HttpStatus.UNAUTHORIZED.value());
             if(user.getRole() == UserRoleEnum.ADMIN) {
+                post.removecomment(comment);
                 commentRepository.delete(comment);
                 return response;
             }
             if (user.getId().equals(comment.getUserId())) {
+                post.removecomment(comment);
                 commentRepository.delete(comment);
                 return response;
             } else {

@@ -4,10 +4,11 @@ import com.sparta.posting.dto.LoginRequestDto;
 import com.sparta.posting.dto.ResponseDto;
 import com.sparta.posting.dto.SignupRequestDto;
 import com.sparta.posting.service.UserService;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor

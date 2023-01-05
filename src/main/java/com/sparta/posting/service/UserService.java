@@ -8,12 +8,12 @@ import com.sparta.posting.entity.User;
 import com.sparta.posting.entity.UserRoleEnum;
 import com.sparta.posting.jwt.JwtUtil;
 import com.sparta.posting.repository.UserRepository;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @Service

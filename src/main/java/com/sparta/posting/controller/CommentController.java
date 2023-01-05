@@ -4,9 +4,9 @@ import com.sparta.posting.dto.CommentRequestDto;
 import com.sparta.posting.dto.ResponseDto;
 import com.sparta.posting.entity.Comment;
 import com.sparta.posting.service.CommentService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
