@@ -3,8 +3,10 @@ package com.sparta.posting.controller;
 import com.sparta.posting.dto.HttpResponseDto;
 import com.sparta.posting.dto.LoginRequestDto;
 import com.sparta.posting.dto.SignupRequestDto;
+import com.sparta.posting.security.UserDetailsImpl;
 import com.sparta.posting.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,5 +28,10 @@ public class UserController {
     @PostMapping("/login")
     public HttpResponseDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         return userService.login(loginRequestDto, response);
+    }
+
+    @PostMapping("/delete")
+    public HttpResponseDto delete(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return userService.delte(userDetails.getUser());
     }
 }

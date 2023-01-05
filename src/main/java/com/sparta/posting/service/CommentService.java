@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 
 
 @Service
@@ -62,5 +63,11 @@ public class CommentService {
         } else {
             return new HttpResponseDto("작성자만 삭제할 수 있습니다.",400);
         }
+    }
+
+    public HttpResponseDto deleteByPost(Post post) {
+        List<Comment> comments = commentRepository.findAllByPost(post);
+        commentRepository.deleteAll(comments);
+        return new HttpResponseDto("댓글삭제 완료!",HttpStatus.UNAUTHORIZED.value());
     }
 }

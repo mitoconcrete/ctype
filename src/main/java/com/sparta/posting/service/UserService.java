@@ -21,6 +21,8 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PostService postService;
+
 
     private final JwtUtil jwtUtil;
 
@@ -69,5 +71,12 @@ public class UserService {
 
         HttpResponseDto response1 = new HttpResponseDto("로그인성공",HttpStatus.UNAUTHORIZED.value());
         return response1;
+    }
+
+    @Transactional
+    public HttpResponseDto delte(User user) {
+        postService.deletePostByUser(user);
+        userRepository.delete(user);
+        return new HttpResponseDto("회원탈퇴 성공!", HttpStatus.UNAUTHORIZED.value());
     }
 }

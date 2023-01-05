@@ -25,6 +25,7 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
     private final CommentLikeRepository commentLikeRepository;
+    private final CommentService commentService;
 
     @Transactional             //컨트롤러와 결합해주는 역할을 한다.
     public PostResponseDto createPosting(PostRequestDto postRequestDto, User user) {
@@ -73,14 +74,25 @@ public class PostService {
     }
 
     @Transactional
-    public HttpResponseDto deletePosting(Long postId, User user) {
+    public HttpResponseDto deletePost(Long postId, User user) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new NullPointerException("게시물이 존재하지 않습니다.")
         );
         if (post.getUser().getId() != user.getId()) {
             return new HttpResponseDto("작성자만 삭제할 수 있습니다.",HttpStatus.UNAUTHORIZED.value());
         }
+        commentService.deleteByPost(post);
         postRepository.deleteById(postId);
         return new HttpResponseDto("게시물삭제가 완료되었습니다.",HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Transactional
+    public HttpResponseDto deletePostByUser(User user) {
+        List<Post> posts = postRepository.findAllByUser(user);
+        for(Post post : posts) {
+            commentService.deleteByPost(post);
+            postRepository.delete(post);
+        }
+        return new HttpResponseDto("게시물삭제 성공!",HttpStatus.UNAUTHORIZED.value());
     }
 }
