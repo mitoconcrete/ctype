@@ -35,6 +35,7 @@ public class Post extends Datestamped{
     @JsonIgnore
     private Long userId;
 
+
     @OneToMany
     public List<Comment> comments = new ArrayList<>();
 
@@ -56,4 +57,6 @@ public class Post extends Datestamped{
     public void removecomment(Comment comment) {
         this.comments.remove(comment);
     }
+
+
 }

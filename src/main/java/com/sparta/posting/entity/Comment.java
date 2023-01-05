@@ -32,6 +32,7 @@ public class Comment extends Datestamped{
     @JsonIgnore
     private Long postId;
 
+    private int likecnt;
 
     public Comment(CommentRequestDto commentRequestDto, User user, Long id) {
         this.content = commentRequestDto.getContent();
@@ -43,5 +44,12 @@ public class Comment extends Datestamped{
 
     public void update(CommentRequestDto commentRequestDto) {
         this.content = commentRequestDto.getContent();
+    }
+
+    public void likeplus() {
+        this.likecnt += 1;
+    }
+    public void likeminus() {
+        this.likecnt -= 1;
     }
 }

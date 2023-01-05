@@ -15,6 +15,7 @@ public class PostResponseAdminDto {
     private String title;
     private String contents;
     private String writer;
+
     private List<CommentResponseAdminDto> comments = new ArrayList<>();
 
     public PostResponseAdminDto(Post post) {
