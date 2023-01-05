@@ -1,7 +1,6 @@
 package com.sparta.posting.controller;
 
 import com.sparta.posting.dto.PostRequestDto;
-import com.sparta.posting.dto.ResponseDto;
 import com.sparta.posting.entity.Post;
 import com.sparta.posting.service.PostService;
 import lombok.RequiredArgsConstructor;

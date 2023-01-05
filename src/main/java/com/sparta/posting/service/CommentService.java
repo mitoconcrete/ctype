@@ -1,7 +1,6 @@
 package com.sparta.posting.service;
 
 import com.sparta.posting.dto.CommentRequestDto;
-import com.sparta.posting.dto.ResponseDto;
 import com.sparta.posting.entity.*;
 import com.sparta.posting.jwt.JwtUtil;
 import com.sparta.posting.repository.CommentRepository;

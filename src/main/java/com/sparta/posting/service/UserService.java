@@ -2,7 +2,6 @@ package com.sparta.posting.service;
 
 
 import com.sparta.posting.dto.LoginRequestDto;
-import com.sparta.posting.dto.ResponseDto;
 import com.sparta.posting.dto.SignupRequestDto;
 import com.sparta.posting.entity.User;
 import com.sparta.posting.entity.UserRoleEnum;
